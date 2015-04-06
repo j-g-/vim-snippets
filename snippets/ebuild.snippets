@@ -1,0 +1,37 @@
+snippet gitfetch
+	if [[ ${PV} == 9999* ]] ; then
+		inherit git-r3
+		EGIT_REPO_URI="${0}"
+		KEYWORDS=""
+	fi
+
+snippet userpatches
+	src_prepare() {
+		epatch_user
+	}
+
+snippet econf
+	src_configure() {
+		econf \
+			${0}
+	}
+
+snippet enewgroup
+	if [ -z "$(egetent group ${1:name} 2>/dev/null)" ]; then
+		enewgroup $1
+		einfo
+		einfo "The group '$1' has been created. Any users you add to this"
+		einfo "group have access to files created by the daemons."
+		einfo
+	fi
+
+snippet enewuser
+	if [ -z "$(egetent passwd ${1:name} 2>/dev/null)" ]; then
+		enewuser $1 ${2:uid} ${3:shell} ${4:/var/lib/$1} $1${5:,groups}
+		einfo
+		einfo "The user '$1' has been created."
+		einfo
+	fi
+	${0}
+
+
